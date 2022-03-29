@@ -1,4 +1,4 @@
-﻿; Using a Joystick as a Mouse for TFT
+; Using a Joystick as a Mouse for TFT
 ; To use this script, http://www.autohotkey.com
 ; This script allows to use a gamepad as mouse and keyboard.
 ; It is fully configurable and can meet several requests I hope.
@@ -28,23 +28,23 @@ R2_OR_RT      := 8
 
 ; Resolution of your screen
 ; Required. This makes it possible to automatically know the place of the boxes
-RESOLUTION_X := 2256    ; Default: 1920
-RESOLUTION_Y := 1504    ; Default: 1080
+RESOLUTION_X := 1920    ; Default: 1920
+RESOLUTION_Y := 1080    ; Default: 1080
 
 ; If your system has more than one joystick, increase this value to use a joystick
 ; I noticed when I'm in bluetooth that the value is 2 or else 1
-NUM_CONTROLLER := 2     ; Default 1
+NUM_CONTROLLER := 1     ; Default 1
 
 ; Shortcuts TFT
 ; if you use other keys in tft, edit with your shortcuts
-K_BUY_XP    := "f"
-K_REROLL    := "d"
-K_SELL      := "e"
+K_BUY_XP    := "f"      ; Default: f
+K_REROLL    := "d"      ; Default: d
+K_SELL      := "e"      ; Default: e
 
-K_NEXT_CAM  := "q"
-K_PREV_CAM  := "r"
-K_CENT_CAM  := "Space"
-K_DEP_RET   := "w"
+K_NEXT_CAM  := "q"      ; Default: q
+K_PREV_CAM  := "r"      ; Default: r
+K_CENT_CAM  := "Space"  ; Default: Space
+K_DEP_RET   := "w"      ; Default: w
 
 ; Buttons configuration
 ; Here you can decide whoch buttons does what
@@ -63,7 +63,7 @@ CUS_KEY_1   := [L1_OR_LB, R1_OR_RB, K_CENT_CAM] ; Default: L1_OR_LB&R1_OR_RB    
 CUS_KEY_2   := [L2_OR_LT, R2_OR_RT, K_DEP_RET]  ; Default: L2_OR_LT&R2_OR_RT     (custom)
 
 ; Movement speed of the mouse (in second)
-SPEED := 2      ; Default: 2
+SPEED := 2      ; Default: 1.5
 
 ; Delay to go on the game (in second)
 WAIT  := 3      ; Default: 3
@@ -75,22 +75,41 @@ DEBUG := 0
 ; You will see a small window next to your mouse.
 ; First, go to each box and write down all the numbers in each box that will appear.
 ; Second, add them to the corresponding variables. More explications in my github
+AREA_BATTLEFIELD_X_1 := [29, 35, 41, 48, 53, 59, 65]
+AREA_BATTLEFIELD_X_2 := [32, 38, 44, 50, 56, 63, 69]
+AREA_BATTLEFIELD_Y   := [42, 48, 55, 62]
 
-AREA_BATTLEFIELD_X_1 := [24, 31, 39, 48, 53, 61, 68]
-AREA_BATTLEFIELD_X_2 := [28, 34, 42, 50, 57, 64, 71]
-AREA_BATTLEFIELD_Y   := [41, 48, 55, 62]
-
-AREA_BENCH_X    := [17, 25, 32, 39, 46, 53, 60, 67, 75]
+AREA_BENCH_X    := [22, 29, 34, 41, 47, 53, 59, 66, 72]
 AREA_BENCH_Y    := [73]
 
-AREA_SHOP_X     := [26, 39, 51, 64, 76]
+AREA_SHOP_X     := [30, 40, 51, 61, 72]
 AREA_SHOP_Y     := [92]
 
-AREA_OBJECTS_X  := [ [12, 15], [11, 15, 18], [13, 16], [10], [12], [9] ]
-AREA_OBJECTS_Y  := [ 57, 61, 63, 66, 69, 72 ]
+AREA_OBJECTS_X  := [ [18, 21], [18, 20, 23], [18, 21], [16], [18], [16] ]
+AREA_OBJECTS_Y  := [ 58, 61, 63, 66, 69, 72 ]
 
 ; End of configuration. Don't change anything below
 ; ---------------------------------------------------------------------------------
+
+if (!GetKeyState(NUM_CONTROLLER "JoyName")) {
+    debug_num_controller := []
+    Loop 16 {
+        if (GetKeyState(A_Index "JoyName"))
+            debug_num_controller.Push(A_Index)
+    }
+    if(debug_num_controller.Length() == 1) {
+        NUM_CONTROLLER := debug_num_controller[i]
+    }
+    else {
+        for i in debug_num_controller {
+            if(i != 1)
+                str := str ", "
+            str := str debug_num_controller[i]
+        }
+        MsgBox Error ! Controller not detected. `nChange the value of NUM_CONTROLLER with this : %str%
+        ExitApp
+    }
+}
 
 BUY_XP      := NUM_CONTROLLER "Joy" BUY_XP
 LEFT_CLICK  := NUM_CONTROLLER "Joy" LEFT_CLICK
@@ -100,7 +119,7 @@ SELL        := NUM_CONTROLLER "Joy" SELL
 NEXT_CAM    := NUM_CONTROLLER "Joy" NEXT_CAM
 PREV_CAM    := NUM_CONTROLLER "Joy" PREV_CAM
 RIGHT_CLICK := NUM_CONTROLLER "Joy" RIGHT_CLICK
-DEP_RET  := NUM_CONTROLLER "Joy" DEP_RET
+DEP_RET     := NUM_CONTROLLER "Joy" DEP_RET
 
 CUS_KEY_1   := [NUM_CONTROLLER "Joy" CUS_KEY_1[1], NUM_CONTROLLER "Joy" CUS_KEY_1[2], CUS_KEY_1[3]]
 CUS_KEY_2   := [NUM_CONTROLLER "Joy" CUS_KEY_2[1], NUM_CONTROLLER "Joy" CUS_KEY_2[2], CUS_KEY_2[3]]
@@ -136,7 +155,7 @@ Loop {
 ; Coordinates of sqaures
 BATTLEFIELD_X_1 := [DIV_100_X * AREA_BATTLEFIELD_X_1[1], DIV_100_X * AREA_BATTLEFIELD_X_1[2], DIV_100_X * AREA_BATTLEFIELD_X_1[3], DIV_100_X * AREA_BATTLEFIELD_X_1[4] - 20, DIV_100_X * AREA_BATTLEFIELD_X_1[5], DIV_100_X * AREA_BATTLEFIELD_X_1[6], DIV_100_X * AREA_BATTLEFIELD_X_1[7]]
 BATTLEFIELD_X_2 := [DIV_100_X * AREA_BATTLEFIELD_X_2[1], DIV_100_X * AREA_BATTLEFIELD_X_2[2], DIV_100_X * AREA_BATTLEFIELD_X_2[3], DIV_100_X * AREA_BATTLEFIELD_X_2[4] - 20, DIV_100_X * AREA_BATTLEFIELD_X_2[5], DIV_100_X * AREA_BATTLEFIELD_X_2[6] + 20, DIV_100_X * AREA_BATTLEFIELD_X_2[7] + 40]
-BATTLEFIELD_Y := [DIV_100_Y * AREA_BATTLEFIELD_Y[1], DIV_100_Y * AREA_BATTLEFIELD_Y[2], DIV_100_Y * AREA_BATTLEFIELD_Y[3], DIV_100_Y * AREA_BATTLEFIELD_Y[4]]
+BATTLEFIELD_Y   := [DIV_100_Y * AREA_BATTLEFIELD_Y[1], DIV_100_Y * AREA_BATTLEFIELD_Y[2], DIV_100_Y * AREA_BATTLEFIELD_Y[3], DIV_100_Y * AREA_BATTLEFIELD_Y[4]]
 
 BENCH_X := [DIV_100_X * AREA_BENCH_X[1], DIV_100_X * AREA_BENCH_X[2], DIV_100_X * AREA_BENCH_X[3], DIV_100_X * AREA_BENCH_X[4], DIV_100_X * AREA_BENCH_X[5], DIV_100_X * AREA_BENCH_X[6], DIV_100_X * AREA_BENCH_X[7], DIV_100_X * AREA_BENCH_X[8], DIV_100_X * AREA_BENCH_X[9]]
 BENCH_Y := DIV_100_Y * AREA_BENCH_Y[1]
@@ -150,9 +169,9 @@ OBJECTS_X_4 := [DIV_100_X * AREA_OBJECTS_X[3, 1], DIV_100_X * AREA_OBJECTS_X[3, 
 OBJECTS_X_3 := [DIV_100_X * AREA_OBJECTS_X[4, 1]]
 OBJECTS_X_2 := [DIV_100_X * AREA_OBJECTS_X[5, 1]]
 OBJECTS_X_1 := [DIV_100_X * AREA_OBJECTS_X[6, 1]]
-OBJECTS_Y := [DIV_100_Y * AREA_OBJECTS_Y[6], DIV_100_Y * AREA_OBJECTS_Y[5], DIV_100_Y * AREA_OBJECTS_Y[4], DIV_100_Y * AREA_OBJECTS_Y[3], DIV_100_Y * AREA_OBJECTS_Y[2], DIV_100_Y * AREA_OBJECTS_Y[1]]
+OBJECTS_Y   := [DIV_100_Y * AREA_OBJECTS_Y[6], DIV_100_Y * AREA_OBJECTS_Y[5], DIV_100_Y * AREA_OBJECTS_Y[4], DIV_100_Y * AREA_OBJECTS_Y[3], DIV_100_Y * AREA_OBJECTS_Y[2], DIV_100_Y * AREA_OBJECTS_Y[1]]
 
-; You have 3 seconds to return to the game
+; You have N seconds to return to the game (default 3sec)
 if(!DEBUG)
     Sleep WAIT
 
@@ -185,7 +204,7 @@ while program_launched != 0
     ; Simulate mouse movement
     joy_x := GetKeyState(BTN_MOVE_X, P)
     joy_y := GetKeyState(BTN_MOVE_Y, P)
-    if(!(joy_x >= 45 && joy_x <= 55) || !(joy_y >= 45 && joy_y <= 55))
+    if(!(joy_x >= 43 && joy_x <= 57) || !(joy_y >= 45 && joy_y <= 55))
         MouseMove, joy_x * DIV_100_X, joy_y * DIV_100_Y
 
     ; Get ALL event keys
@@ -220,7 +239,7 @@ while program_launched != 0
     ; get the coordinates
     if(curr_pos_y <= 4) {
         curr_len := 7
-        curr_pos_x := curr_pos_x == 8 && listener_btns_move == BTN_RIGHT ? 1 : curr_pos_x > curr_len ? curr_len : !curr_pos_x ? 1 : listener_btns_move == BTN_UP ? curr_pos_x - 1 : !curr_pos_x ? curr_len : curr_pos_x
+        curr_pos_x := (curr_pos_x == 8 && listener_btns_move == BTN_RIGHT) ? 1 : curr_pos_x > curr_len || !curr_pos_x ? curr_len : listener_btns_move == BTN_UP && curr_pos_y >= 4 ? curr_pos_x - 1 : curr_pos_x
         curr_pos_y := curr_pos_y <= 0 ? 6 : curr_pos_y
         coord_x := curr_pos_y == 2 || curr_pos_y == 4 ? BATTLEFIELD_X_2 : BATTLEFIELD_X_1
         coord_y := BATTLEFIELD_Y[curr_pos_y]
@@ -241,7 +260,7 @@ while program_launched != 0
     }
     else if(curr_pos_y == 6) {
         curr_len := 5
-        curr_pos_x := curr_pos_x == curr_len + 1 ? 1 : !curr_pos_x ? curr_len : curr_pos_x
+        curr_pos_x := listener_btns_move == BTN_DOWN || listener_btns_move == BTN_UP ? 3 : curr_pos_x == curr_len + 1 ? 1 : !curr_pos_x ? curr_len : curr_pos_x
         coord_x := SHOP_X
         coord_y := SHOP_Y
     }
