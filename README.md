@@ -34,11 +34,12 @@ You can use the left joystick to move the mouse in a circle to get your champion
 | L2 & R2  -  LT & RT | Do nothing                  |               | Yes      |
 | Directional arrow   | Left / Right / Down / Up    |               | No       |
 | Joystick left       | Mouse the mouse in a circle |               | No       |
+| OPTIONS - LIST      | Escape / Open menu options  |               | Yes      |
 
 
 ### Troubleshooting
 
-| Name of the Troubleshooting | issues                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Name of the Troubleshooting | Issues                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 |-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Controller not detected     | Normally a window should open and give you the number to replace this variable `NUM_CONTROLLER := 1`                                                                                                                                                                                                                                                                                                                                                                                               |
 | Mouse position wrong        | Change this value `DEBUG := 0` to 1, change your window mode on TFT to `no edge` and then restart the script. You'll see a little window that will follow your mouse. It displays the percentage of your location. <br/>Get the values on each squares and add these values in their corresponding variable.(line 79-90) <br/>**Warn !** Take coordinates like this : <u>Up to Down an Left to Right</u><br/> _Example (for shop) :_ ``AREA_SHOP_X := [x1, x2.., x5]`` and ``AREA_SHOP_Y := [y1]`` | 
@@ -46,4 +47,4 @@ You can use the left joystick to move the mouse in a circle to get your champion
 ### Disclaimer
 
 This script was created for me and for others who would like to have the possibility to play with a controller. You can use an XBOX or PS4 controller, I did not test the others.<br>
-<u>**Warning :**</u> I'm not responsible if Riot decides to ban you for using a 3rd party app, though I believe it follows their TOS since nothing is being automated or anything, and Autohotkey is used for other LoL stuff I've seen, so I'm not too concerned about using it myself. Hopefully someone finds it at useful.
+<u>**Warning :**</u> I'm not responsible if Riot decides to ban you for using a 3rd party app. Remember, aI'm not too concerned about using it myself. Hopefully someone finds it at useful.
