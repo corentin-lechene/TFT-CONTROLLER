@@ -12,16 +12,16 @@
 ; Go to the edit section (~ line 71)
 
 ; PS4 or XBOX buttons usable. Do not change anything !
-SQUARE_OR_X   := 1
-CROSS_OR_A    := 2
-CIRCLE_OR_B   := 3
-TRIANGLE_OR_Y := 4
+SQUARE_OR_X     := 1
+CROSS_OR_A      := 2
+CIRCLE_OR_B     := 3
+TRIANGLE_OR_Y   := 4
 
-L1_OR_LB      := 5
-R1_OR_RB      := 6
-L2_OR_LT      := 7
-R2_OR_RT      := 8
-
+L1_OR_LB        := 5
+R1_OR_RB        := 6
+L2_OR_LT        := 7
+R2_OR_RT        := 8
+OPTIONS_OR_LIST := 10
 ; ---------------------------------------------------------------------------------
 ; Configuration
 ; This part you can edit.
@@ -37,33 +37,38 @@ NUM_CONTROLLER := 1     ; Default 1
 
 ; Shortcuts TFT
 ; if you use other keys in tft, edit with your shortcuts
-K_BUY_XP    := "f"      ; Default: f
-K_REROLL    := "d"      ; Default: d
-K_SELL      := "e"      ; Default: e
+K_BUY_XP    := "f"        ; Default: f
+K_REROLL    := "d"        ; Default: d
+K_SELL      := "e"        ; Default: e
+ 
+K_NEXT_CAM  := "q"        ; Default: q
+K_PREV_CAM  := "r"        ; Default: r
+K_CENT_CAM  := "{Space}"  ; Default: Space
+K_DEP_RET   := "w"        ; Default: w
 
-K_NEXT_CAM  := "q"      ; Default: q
-K_PREV_CAM  := "r"      ; Default: r
-K_CENT_CAM  := "Space"  ; Default: Space
-K_DEP_RET   := "w"      ; Default: w
+K_ESCAPE    := "{Esc}" ; Default : Escape
 
 ; Buttons configuration
-; Here you can decide whoch buttons does what
-BUY_XP      := SQUARE_OR_X      ; Default: SQUARE_OR_X
-LEFT_CLICK  := CROSS_OR_A       ; Default: CROSS_OR_A
-REROLL      := CIRCLE_OR_B      ; Default: CIRCLE_OR_B
-SELL        := TRIANGLE_OR_Y    ; Default: TRIANGLE_OR_Y
+; Here you can decide which buttons does what
+BUY_XP       := SQUARE_OR_X     ; Default: SQUARE_OR_X
+LEFT_CLICK   := CROSS_OR_A      ; Default: CROSS_OR_A
+REROLL       := CIRCLE_OR_B     ; Default: CIRCLE_OR_B
+SELL         := TRIANGLE_OR_Y   ; Default: TRIANGLE_OR_Y
 
-PREV_CAM    := L1_OR_LB         ; Default: L1_OR_LB
-NEXT_CAM    := R1_OR_RB         ; Default: R1_OR_RB
-DEP_RET     := L2_OR_LT         ; Default: L2_OR_LT
-RIGHT_CLICK := R2_OR_RT         ; Default: R2_OR_RT
+PREV_CAM     := L1_OR_LB        ; Default: L1_OR_LB
+NEXT_CAM     := R1_OR_RB        ; Default: R1_OR_RB
+DEP_RET      := L2_OR_LT        ; Default: L2_OR_LT
+RIGHT_CLICK  := R2_OR_RT        ; Default: R2_OR_RT
 
-; Here, its the custom key. you have to press both
+MENU_OPTIONS := OPTIONS_OR_LIST ; Default: OPTIONS_OR_LIST
+
+; Here, its the custom key. you have to press both;
+; [touch_1, touche_2, what_you_want_to_do]
 CUS_KEY_1   := [L1_OR_LB, R1_OR_RB, K_CENT_CAM] ; Default: L1_OR_LB&R1_OR_RB     (custom)
 CUS_KEY_2   := [L2_OR_LT, R2_OR_RT, K_DEP_RET]  ; Default: L2_OR_LT&R2_OR_RT     (custom)
 
 ; Movement speed of the mouse (in second)
-SPEED := 2      ; Default: 1.5
+SPEED := 2      ; Default: 2
 
 ; Delay to go on the game (in second)
 WAIT  := 3      ; Default: 3
@@ -111,15 +116,17 @@ if (!GetKeyState(NUM_CONTROLLER "JoyName")) {
     }
 }
 
-BUY_XP      := NUM_CONTROLLER "Joy" BUY_XP
-LEFT_CLICK  := NUM_CONTROLLER "Joy" LEFT_CLICK
-REROLL      := NUM_CONTROLLER "Joy" REROLL
-SELL        := NUM_CONTROLLER "Joy" SELL
+BUY_XP       := NUM_CONTROLLER "Joy" BUY_XP
+LEFT_CLICK   := NUM_CONTROLLER "Joy" LEFT_CLICK
+REROLL       := NUM_CONTROLLER "Joy" REROLL
+SELL         := NUM_CONTROLLER "Joy" SELL
 
-NEXT_CAM    := NUM_CONTROLLER "Joy" NEXT_CAM
-PREV_CAM    := NUM_CONTROLLER "Joy" PREV_CAM
-RIGHT_CLICK := NUM_CONTROLLER "Joy" RIGHT_CLICK
-DEP_RET     := NUM_CONTROLLER "Joy" DEP_RET
+NEXT_CAM     := NUM_CONTROLLER "Joy" NEXT_CAM
+PREV_CAM     := NUM_CONTROLLER "Joy" PREV_CAM
+RIGHT_CLICK  := NUM_CONTROLLER "Joy" RIGHT_CLICK
+DEP_RET      := NUM_CONTROLLER "Joy" DEP_RET
+
+MENU_OPTIONS := NUM_CONTROLLER "Joy" OPTIONS_OR_LIST
 
 CUS_KEY_1   := [NUM_CONTROLLER "Joy" CUS_KEY_1[1], NUM_CONTROLLER "Joy" CUS_KEY_1[2], CUS_KEY_1[3]]
 CUS_KEY_2   := [NUM_CONTROLLER "Joy" CUS_KEY_2[1], NUM_CONTROLLER "Joy" CUS_KEY_2[2], CUS_KEY_2[3]]
@@ -211,7 +218,7 @@ while program_launched != 0
     listener_btns_cus   := DoublePress(CUS_KEY_1[1], CUS_KEY_1[2], 20) != -1 ? 20 : DoublePress(CUS_KEY_2[1], CUS_KEY_2[2], 20) != -1 ? 21 : -1
     listener_btns_move  := listener_btns_cus != -1 ? -1 : GetKeyState(BTN_MOVE, P) ;
     listener_btns_prim  := listener_btns_cus != -1 ? -1 : GetKeyState(BUY_XP, P) ? SQUARE_OR_X : GetKeyState(REROLL, P) ? CIRCLE_OR_B : GetKeyState(SELL, P) ? TRIANGLE_OR_Y : -1
-    listener_btns_sec   := listener_btns_cus != -1 ? -1 : GetKeyState(NEXT_CAM, P) ? R1_OR_RB : GetKeyState(PREV_CAM, P) ? L1_OR_LB : GetKeyState(RIGHT_CLICK, P) ? R2_OR_RT : GetKeyState(DEP_RET, P) ? L2_OR_LT : -1
+    listener_btns_sec   := listener_btns_cus != -1 ? -1 : GetKeyState(NEXT_CAM, P) ? R1_OR_RB : GetKeyState(PREV_CAM, P) ? L1_OR_LB : GetKeyState(RIGHT_CLICK, P) ? R2_OR_RT : GetKeyState(DEP_RET, P) ? L2_OR_LT : GetKeyState(MENU_OPTIONS, P) ? OPTIONS_OR_LIST : -1
     curr_btn := listener_btns_cus != -1 ? listener_btns_cus : listener_btns_move != -1 ? listener_btns_move : listener_btns_prim != -1 ? listener_btns_prim : listener_btns_sec != -1 ? listener_btns_sec : -1
     switch curr_btn {
         case BTN_RIGHT: curr_pos_x += 1
@@ -226,6 +233,7 @@ while program_launched != 0
         case 6: key := K_NEXT_CAM
         case 7: key := K_DEP_RET
         case 8: Click Right
+        case 10: key := K_ESCAPE
 
         case 20: key := CUS_KEY_1[3]
         case 21: key := CUS_KEY_2[3]
@@ -323,7 +331,7 @@ while program_launched != 0
     }
 
     ; End the program
-    if(GetKeyState("Escape"))
+    if(GetKeyState("Escape") && GetKeyState("Ctrl"))
         program_launched := 0
 }
 
