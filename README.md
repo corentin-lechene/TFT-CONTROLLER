@@ -29,11 +29,11 @@ You can use the left joystick to move the mouse in a circle to get your champion
 | L1       -  LB      | Next board                  | q             | Yes      |
 | R1       -  RB      | Previous board              | r             | Yes      |
 | L2       -  LT      | Left Click                  |               | Yes      |
-| R2       -  RT      | Deploy / Return to bench    | w             | Yes      |
+| R2       -  RT      | Do nothing                  |               | Yes      |
 | L1 & R1  -  LB & RB | Your board                  | Space         | Yes      |
-| L2 & R2  -  LT & RT | Do nothing                  |               | Yes      |
+| L2 & R2  -  LT & RT | Deploy / Return to bench    | w             | Yes      |
 | Directional arrow   | Left / Right / Down / Up    |               | No       |
-| Joystick left       | Mouse the mouse in a circle |               | No       |
+| Joystick left       | Move the mouse in a circle  |               | No       |
 | OPTIONS - LIST      | Escape / Open menu options  |               | Yes      |
 
 
